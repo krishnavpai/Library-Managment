@@ -1,6 +1,8 @@
 # Library Management API
 
 This is a simple library management API that allows users to perform various operations such as borrowing books, checking availability, searching for books, and adding new books. The API uses MySQL for data storage and JWT authentication for user authorization.
+![Image](./<img width="219" alt="Screenshot 2023-07-10 141853" src="https://github.com/krishnavpai/Library-Managment/assets/77066781/fc92c2af-3b04-47d0-a55a-8cf02917d378">
+
 
 ## Prerequisites
 
