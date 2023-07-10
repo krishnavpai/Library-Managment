@@ -1,10 +1,10 @@
 const pool = require("../../config/database");
 
 module.exports = {
+  
   create: (data, callBack) => {
     pool.query(
-      `insert into registration(firstName, lastName, gender, email, password, number) 
-                values(?,?,?,?,?,?)`,
+      `INSERT INTO registration(firstName, lastName, gender, email, password, number) VALUES(?,?,?,?,?,?)`,
       [
         data.first_name,
         data.last_name,
@@ -13,7 +13,7 @@ module.exports = {
         data.password,
         data.number
       ],
-      (error, results, fields) => {
+      (error, results) => {
         if (error) {
           callBack(error);
         }
@@ -48,9 +48,6 @@ module.exports = {
       }
     );
   },
-
-
-  
   getUsers: callBack => {
     pool.query(
       `select id,firstName,lastName,gender,email,number from registration`,
@@ -94,5 +91,51 @@ module.exports = {
         return callBack(null, results[0]);
       }
     );
+  },
+  addBook: (data, callBack) => {
+    pool.query(
+      `INSERT INTO books(bookName, authorName, isbn) VALUES(?,?,?)`,
+      [
+        data.title,
+        data.author,
+        data.isbn
+      ],
+      (error, results) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getBooks: callBack => {
+    pool.query(
+      `select id,bookName,authorName,isbn from books`, 
+      [],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getBooksTitle: (title, callBack) => {
+    pool.query(
+      `SELECT * FROM books WHERE bookName LIKE '%${title}%'`,
+      [title],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        console.log(results);
+        return callBack(null, results);
+      }
+    );
   }
+            
+
+
 };

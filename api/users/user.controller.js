@@ -4,21 +4,32 @@ const {
   getUserByUserId,
   getUsers,
   updateUser,
-  deleteUser
+  deleteUser,
+  addBook,
+  getBooks,
+  getBooksTitle
 } = require("./user.service");
+
+
+
+
 const { hashSync, genSaltSync, compareSync } = require("bcrypt");
+const { json } = require("express");
 const { sign } = require("jsonwebtoken");
 
-
-
 module.exports = {
+
+
+
   createUser: (req, res) => {
+
     const body = req.body;
     const salt = genSaltSync(10);
 
-    // body.password = hashSync(body.password, salt);
-    console.log(body.password);
+    // console.log(`${json(body.password)} body---------------------`);
+    
 
+    body.password = hashSync(body.password, salt);
     create(body, (err, results) => {
       if (err) {
         console.log(err);
@@ -38,20 +49,20 @@ module.exports = {
 
 
   login: (req, res) => {
+
     const body = req.body;
+    console.log(JSON.stringify(body));
     getUserByUserEmail(body.email, (err, results) => {
       if (err) {
         console.log(err);
       }
-      console.log(`${results} asdkgu`);
       if (!results) {
         return res.json({
           success: 0,
-          data: "Invalid email or passwordvhnbxfh"
+          data: "Invalid email or password"
         });
       }
-      // const result = compareSync(body.password, results.password);
-      const result = body.password == results.password;
+      const result = compareSync(body.password, results.password);
       if (result) {
         results.password = undefined;
         const jsontoken = sign({ result: results }, "qwe1234", {
@@ -70,6 +81,10 @@ module.exports = {
       }
     });
   },
+
+
+
+
   getUserByUserId: (req, res) => {
     const id = req.params.id;
     getUserByUserId(id, (err, results) => {
@@ -80,7 +95,7 @@ module.exports = {
       if (!results) {
         return res.json({
           success: 0,
-          message: "Record not Found"
+          message: "Record not fgound"
         });
       }
       results.password = undefined;
@@ -90,6 +105,8 @@ module.exports = {
       });
     });
   },
+
+
   getUsers: (req, res) => {
     getUsers((err, results) => {
       if (err) {
@@ -102,6 +119,8 @@ module.exports = {
       });
     });
   },
+
+
   updateUsers: (req, res) => {
     const body = req.body;
     const salt = genSaltSync(10);
@@ -135,5 +154,51 @@ module.exports = {
         message: "user deleted successfully"
       });
     });
+  },
+
+
+  addBook: (req, res) => {
+    const body = req.body;
+    console.log(body);
+    addBook(body, (err, results) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      return res.json({
+        success: 1,
+        message: "Book added successfully"
+      });
+    });
+  },
+
+  getBooks: (req, res) => {
+    console.log("getBooks");
+    getBooks((err, results) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      return res.json({
+        success: 1,
+        data: results
+      });
+    });
+  },
+  getBooksTitle: (req, res) => {
+    const slug = req.params.slug
+    console.log(title);
+    getBooksTitle(title, (err, results) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      return res.json({
+        success: 1,
+        data: results
+      });
+    });
   }
+
+
 };

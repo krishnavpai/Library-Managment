@@ -6,17 +6,26 @@ const {
   getUserByUserId,
   getUsers,
   updateUsers,
-  deleteUser
+  deleteUser, 
+  addBook,
+  getBooks,
+  getBooksTitle
 } = require("./user.controller");
 
 
-
-
 router.get("/", checkToken, getUsers);
-router.post("/", checkToken, createUser);
-router.get("/:id", checkToken, getUserByUserId);
+
+router.post("/add", createUser);
+
+// router.get("/:id", checkToken, getUserByUserId);
 router.post("/login", login);
 router.patch("/", checkToken, updateUsers);
 router.delete("/", checkToken, deleteUser);
+
+router.post("/addbook", addBook);
+
+router.get("/getbooks", getBooks);
+
+router.get("/get?title=*", getBooksTitle);
 
 module.exports = router;
